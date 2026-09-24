@@ -1,0 +1,26 @@
+workflows:
+  dynamic-island-loop:
+    name: DynamicIslandLoop (unsigned build)
+    max_build_duration: 30
+    instance_type: mac_mini_m2
+    environment:
+      xcode: latest
+    scripts:
+      - name: Build senza firma
+        script: |
+          xcodebuild \
+            -project DynamicIslandLoop.xcodeproj \
+            -scheme DynamicIslandLoop \
+            -sdk iphoneos \
+            -configuration Release \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            -derivedDataPath build \
+            archive -archivePath build/DynamicIslandLoop.xcarchive
+      - name: Impacchetta IPA
+        script: |
+          mkdir -p Payload
+          cp -r build/DynamicIslandLoop.xcarchive/Products/Applications/DynamicIslandLoop.app Payload/
+          zip -r DynamicIslandLoop.ipa Payload
+    artifacts:
+      - DynamicIslandLoop.ipa
