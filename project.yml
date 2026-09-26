@@ -1,0 +1,56 @@
+name: DynamicIslandLoop
+options:
+  bundleIdPrefix: com.piedigi
+  deploymentTarget:
+    iOS: "16.2"
+
+configs:
+  Debug: debug
+  Release: release
+
+targets:
+  DynamicIslandLoop:
+    type: application
+    platform: iOS
+    sources:
+      - App
+      - Shared
+    info:
+      path: App/Info.plist
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.piedigi.dynamicislandloop
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGNING_REQUIRED: NO
+        SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "1"
+    dependencies:
+      - target: DynamicIslandLoopWidgetExtension
+        embed: true
+
+  DynamicIslandLoopWidgetExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - Widget
+      - Shared
+    info:
+      path: Widget/Info.plist
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.piedigi.dynamicislandloop.widget
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGNING_REQUIRED: NO
+        SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "1"
+
+schemes:
+  DynamicIslandLoop:
+    build:
+      targets:
+        DynamicIslandLoop: all
+        DynamicIslandLoopWidgetExtension: all
+    archive:
+      config: Release
